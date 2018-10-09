@@ -58,6 +58,33 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+  function removeTransition(e){
+    if(e.propertyName !== 'transform') return; //Skip this on other properties than transform
+    this.classList.remove('playing');
+  }
+function showActiveKey(e){
+  const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+  key.classList.add('playing');
+}
+
+function playSound(e) {
+  const sound = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+
+  if(!sound) return; //If touch is not mapped, do nothing
+  
+  sound.currentTime = 0; //rewind audio so we can play it over and over again
+  sound.play();
+}
+
+window.addEventListener('keydown', (e) => {
+  playSound(e);
+  showActiveKey(e);
+})
+
+const keys = document.querySelectorAll('.key');
+keys.forEach(key => {
+  key.addEventListener('transitionend', removeTransition);
+})
 
 </script>
 
